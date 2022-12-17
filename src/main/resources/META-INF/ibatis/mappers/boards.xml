@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+ 
+<sqlMap namespace="boards">
+
+	<select id="getAllBoards" resultClass="com.community.boards.Board">
+		select
+			board_no				as no,
+			board_name				as name,
+			board_description		as description,
+			board_seq				as seq,
+			board_read_option		as readOption,
+			board_write_option		as writeOption,
+			board_deleted			as deleted,
+			board_created_date		as createdDate,
+			board_updated_date		as updatedDate,
+			board_deleted_date		as deletedDate,
+			nvl(parent_board_no, -1)	as parentBoardNo
+		from
+			comm_boards
+		order by
+			board_seq asc
+	</select>
+	
+	<select id="getBoardByNo" parameterClass="int" resultClass="com.community.boards.Board">
+		select
+			board_no				as no,
+			board_name				as name,
+			board_description		as description,
+			board_seq				as seq,
+			board_read_option		as readOption,
+			board_write_option		as writeOption,
+			board_deleted			as deleted,
+			board_created_date		as createdDate,
+			board_updated_date		as updatedDate,
+			board_deleted_date		as deletedDate,
+			nvl(parent_board_no, -1)		as parentBoardNo
+		from
+			comm_boards
+		where
+			board_no = #value#
+	</select>
+	
+	<insert id="insertBoard" parameterClass="com.community.boards.Board">
+		insert into comm_boards 
+			(board_no, board_name, board_description, board_seq, board_read_option, board_write_option, parent_board_no)
+		values
+			(comm_boards_seq.nextval, #name#, #description#, #seq#, #readOption#, #writeOption#, #parentBoardNo#)
+	</insert>
+	
+	<update id="updateBoard" parameterClass="com.community.boards.Board">
+		update
+			comm_boards
+		set
+			board_name = #name#,
+			board_description = #description#,
+			board_read_option = #readOption#,
+			board_write_option = #writeOption#,
+			board_deleted = #deleted#,
+			board_seq = #seq#,
+			board_updated_date = sysdate,
+			parent_board_no = #parentBoardNo#
+		where
+			board_no = #no#
+	</update>
+	
+	<update id="updateBoardSeq" parameterClass="int">
+		update
+			comm_boards
+		set
+			board_seq = board_seq + 1
+		where
+			board_seq > (select 
+							board_seq
+			             from 
+			             	comm_boards
+			             where
+			             	board_no = #value#)
+	</update>
+</sqlMap>
+
