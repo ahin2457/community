@@ -22,8 +22,8 @@
 --%>
 <%
 	// 요청파라미터값을 조회한다.
-	int boardNo = StringUtils.stringToNumber(request.getParameter("boardNo"));
-	int parentBoardNo = StringUtils.stringToNumber(request.getParameter("parentBoardNo"));
+	int boardNo = StringUtils.stringToInt(request.getParameter("boardNo"));
+	int parentBoardNo = StringUtils.stringToInt(request.getParameter("parentBoardNo"));
 	String name = request.getParameter("name");
 	String description = request.getParameter("description");
 	String deleted = request.getParameter("deleted");

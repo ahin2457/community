@@ -31,7 +31,7 @@
 --%>
 <%	
 	// 요청 파라미터 값을 조회한다.
-	int boardNo = StringUtils.stringToNumber(request.getParameter("boardNo"));
+	int boardNo = StringUtils.stringToInt(request.getParameter("boardNo"));
 
 	BoardDao boardDao = BoardDao.getInstance();
 	

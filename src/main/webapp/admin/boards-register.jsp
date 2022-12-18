@@ -19,7 +19,7 @@
 --%>
 <%
 	// 요청파라미터값을 조회한다.
-	int parentBoardNo = StringUtils.stringToNumber(request.getParameter("parentBoardNo"));
+	int parentBoardNo = StringUtils.stringToInt(request.getParameter("parentBoardNo"));
 	String name = request.getParameter("name");
 	String description = request.getParameter("description");
 	String readOption = request.getParameter("readOption");

@@ -14,7 +14,7 @@
  --%>
 <%
 	// 요청파라미터값을 조회한다.
-	int boardNo = StringUtils.stringToNumber(request.getParameter("boardNo"));
+	int boardNo = StringUtils.stringToInt(request.getParameter("boardNo"));
 	
 	BoardDao boardDao = BoardDao.getInstance();
 	// 게시판 번호에 해당하는 게시판 정보를 조회한다.
