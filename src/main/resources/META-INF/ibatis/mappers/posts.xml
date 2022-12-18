@@ -4,6 +4,83 @@
  
 <sqlMap namespace="posts">
 
+	<insert id="insertPost" parameterClass="com.community.posts.Post">
+		insert into comm_posts
+			(post_no, post_board_no, post_title, post_writer_no, post_content, post_important, post_original_no)
+		values
+			(comm_posts_seq.nextval, #boardNo#, #title#, #writerNo#, #content#, #important#, comm_posts_seq.currval)
+	</insert>
+	
+	<select id="getAllTotalRows" parameterClass="map" resultClass="int">
+		select
+			count(*)
+		from
+			comm_posts
+		where
+			post_deleted != 'Y'
+		<dynamic>
+			<isNotNull property="boardNo">
+				and post_board_no = #boardNo#
+			</isNotNull>
+		</dynamic>
+	</select>
+	
+	<select id="getAllPosts" parameterClass="map" resultClass="com.community.posts.PostListDto">
+		select 
+			P.post_no 				as no,
+			P.post_board_no			as boardNo,
+			B.board_name			as boardName,
+			P.post_title			as title,
+			P.post_important		as important,
+			P.post_deleted			as deleted,
+			P.post_writer_no		as empNo,
+			E.emp_name				as empName,
+			P.post_created_date		as createdDate
+		from (select
+					row_number() over (order by post_no desc) row_numbers,
+					post_no,
+					post_board_no,
+					post_title,
+					post_important,
+					post_deleted,
+					post_writer_no,
+					post_created_date
+			  from
+			 		comm_posts
+			  where 
+			  		post_deleted != 'Y'
+			  <dynamic>
+			  		<isNotNull property="boardNo">
+			  			and post_board_no = #boardNo#
+			  		</isNotNull>
+			  </dynamic>) P, comm_boards B, comm_employees E
+		where
+			P.post_board_no = B.board_no
+			and P.post_writer_no = E.emp_no
+			and P.row_numbers between #begin# and #end# 
+	</select>
+	
+	<select id="getPostByNo" parameterClass="int" resultClass="com.community.posts.Post">
+		select
+			post_no					as no,
+			post_board_no			as boardNo,
+			post_title				as title,
+			post_writer_no			as writerNo,
+			post_content			as content,
+			post_important 			as important,
+			post_read_count			as readCount,
+			post_suggestion_count	as suggestionCount,
+			post_comment_count		as commentCount,
+			post_deleted			as deleted,
+			post_created_date		as createdDate,
+			post_updated_date		as updatedDate,
+			post_deleted_date		as deletedDate
+			post_original_no		as originalNo
+		from
+			comm_posts
+		where
+			post_no = #value#
+	</select>
 	
 </sqlMap>
 
