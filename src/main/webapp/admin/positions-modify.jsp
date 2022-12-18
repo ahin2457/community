@@ -16,7 +16,7 @@
 --%>
 <%
 	// 요청 파라미터 값을 조회한다.
-	int positionNo = StringUtils.stringToNumber(request.getParameter("positionNo"));
+	int positionNo = StringUtils.stringToInt(request.getParameter("positionNo"));
 	String positionName = request.getParameter("positionName");
 	
 	PositionDao positionDao = PositionDao.getInstance();

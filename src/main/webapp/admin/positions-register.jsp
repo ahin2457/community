@@ -17,7 +17,7 @@
 --%>
 <%
 	// 요청 파라미터 값을 조회한다.
-	int positionSeq = StringUtils.stringToNumber(request.getParameter("positionSeq"));
+	int positionSeq = StringUtils.stringToInt(request.getParameter("positionSeq"));
 	String positionName = request.getParameter("positionName");
 	
 	// Position객체를 생성해서 요청 파라미터 값을 저장한다.

@@ -16,7 +16,7 @@
 --%>
 <%
 	// 요청 파라미터값을 조회한다.
-	int deptNo = StringUtils.stringToNumber(request.getParameter("deptNo"));
+	int deptNo = StringUtils.stringToInt(request.getParameter("deptNo"));
 	String deptName = request.getParameter("deptName");
 	
 	DepartmentDao departmentDao = DepartmentDao.getInstance();
