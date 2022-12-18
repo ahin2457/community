@@ -1,4 +1,4 @@
-package com.community.departemtns;
+package com.community.departments;
 
 import java.util.List;
 

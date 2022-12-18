@@ -1,4 +1,4 @@
-package com.community.departemtns;
+package com.community.departments;
 
 public class Department {
 

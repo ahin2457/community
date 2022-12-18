@@ -4,7 +4,7 @@
  
 <sqlMap namespace="departments">
 
-	<select id="getAllDepartments" resultClass="com.community.departemtns.Department">
+	<select id="getAllDepartments" resultClass="com.community.departments.Department">
 		select
 			department_no		as no,
 			department_name		as name
@@ -14,7 +14,7 @@
 			department_name
 	</select>
 	
-	<select id="getDepartmentByNo" parameterClass="int" resultClass="com.community.departemtns.Department">
+	<select id="getDepartmentByNo" parameterClass="int" resultClass="com.community.departments.Department">
 		select
 			department_no		as no,
 			department_name		as name
@@ -24,14 +24,14 @@
 			department_no = #value#
 	</select>
 	
-	<insert id="insertDepartment" parameterClass="com.community.departemtns.Department">
+	<insert id="insertDepartment" parameterClass="com.community.departments.Department">
 		insert into comm_departments
 			(department_no, department_name)
 		values
 			(comm_departments_seq.nextval, #name#)
 	</insert>
 	
-	<update id="updateDepartment" parameterClass="com.community.departemtns.Department">
+	<update id="updateDepartment" parameterClass="com.community.departments.Department">
 		update
 			comm_departments
 		set

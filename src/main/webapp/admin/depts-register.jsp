@@ -1,5 +1,5 @@
-<%@page import="com.community.departemtns.Department"%>
-<%@page import="com.community.departemtns.DepartmentDao"%>
+<%@page import="com.community.departments.Department"%>
+<%@page import="com.community.departments.DepartmentDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%--
