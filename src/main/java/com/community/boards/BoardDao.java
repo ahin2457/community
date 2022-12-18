@@ -1,6 +1,7 @@
 package com.community.boards;
 
 import java.util.List;
+import java.util.Map;
 
 import com.community.util.SqlMapper;
 
@@ -13,8 +14,8 @@ public class BoardDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Board> getAllBoards() {
-		return (List<Board>) SqlMapper.selectList("boards.getAllBoards");
+	public List<Board> getBoards(Map<String, Object> param) {
+		return (List<Board>) SqlMapper.selectList("boards.getBoards", param);
 	}
 	
 	public Board getBoardByNo(int boardNo) {

@@ -1,3 +1,4 @@
+<%@page import="java.util.Map"%>
 <%@page import="com.community.util.StringUtils"%>
 <%@page import="com.community.boards.Board"%>
 <%@page import="java.util.List"%>
@@ -36,7 +37,7 @@
 	BoardDao boardDao = BoardDao.getInstance();
 	
 	// 전체 게시판 목록을 조회한다.
-	List<Board> boardList = boardDao.getAllBoards();
+	List<Board> boardList = boardDao.getBoards(Map.of());
 	
 	// 선택한 게시판의 상세정보를 조회한다.
 	Board selectedBoard = boardDao.getBoardByNo(boardNo);
@@ -65,7 +66,7 @@
 		}
 %>
 				  				<a href="boards.jsp?boardNo=<%=board.getNo() %>" 
-				  					class="list-group-item list-group-action <%=board.getNo() == boardNo ? "active" : "" %>"
+				  					class="list-group-item list-group-action <%=board.getNo() == boardNo ? "active" : "" %> <%="Y".equals(board.getDeleted()) ? "text-decoration-line-through" : "" %>"
 				  					data-board-no="<%=board.getNo() %>">
 				  					<span class="<%=board.getParentBoardNo() > 0 ? "ps-4" : "" %>"> <%=board.getName() %></span>
 				  				</a>

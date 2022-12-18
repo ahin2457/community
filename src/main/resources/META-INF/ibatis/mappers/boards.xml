@@ -4,7 +4,7 @@
  
 <sqlMap namespace="boards">
 
-	<select id="getAllBoards" resultClass="com.community.boards.Board">
+	<select id="getBoards" parameterClass="map" resultClass="com.community.boards.Board">
 		select
 			board_no				as no,
 			board_name				as name,
@@ -19,6 +19,11 @@
 			nvl(parent_board_no, -1)	as parentBoardNo
 		from
 			comm_boards
+		<dynamic>
+			<isNotNull property="deleted">
+				where board_deleted = #deleted#
+			</isNotNull>
+		</dynamic>
 		order by
 			board_seq asc
 	</select>
