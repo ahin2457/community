@@ -2,7 +2,7 @@ package com.community.employees;
 
 import java.util.Date;
 
-public class Employee {
+public class EmployeeDetailDto {
 
 	private int no;
 	private String password;
@@ -10,14 +10,16 @@ public class Employee {
 	private String email;
 	private String phone;
 	private int deptNo;
+	private String deptName;
 	private int positionNo;
+	private String positionName;
 	private String type;
 	private String deleted;
 	private Date createdDate;
 	private Date updatedDate;
 	private Date deletedDate;
 	
-	public Employee() {}
+	public EmployeeDetailDto() {}
 
 	public int getNo() {
 		return no;
@@ -67,12 +69,28 @@ public class Employee {
 		this.deptNo = deptNo;
 	}
 
+	public String getDeptName() {
+		return deptName;
+	}
+
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+
 	public int getPositionNo() {
 		return positionNo;
 	}
 
 	public void setPositionNo(int positionNo) {
 		this.positionNo = positionNo;
+	}
+
+	public String getPositionName() {
+		return positionName;
+	}
+
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
 	}
 
 	public String getType() {

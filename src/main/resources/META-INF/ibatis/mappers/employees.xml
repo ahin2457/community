@@ -4,6 +4,104 @@
  
 <sqlMap namespace="employees">
 
+	<select id="getTotalRows" parameterClass="map" resultClass="int">
+		select
+			count(*)
+		from
+			comm_employees
+	</select>
+
+	<select id="getEmployees" parameterClass="map" resultClass="com.community.employees.EmployeeListDto">
+		select
+			E.emp_no			as no,
+			E.emp_name			as name,
+			E.emp_dept_no		as deptNo,
+			D.department_name	as deptName,
+			E.emp_position_no	as positionNo,
+			P.position_name		as positionName,
+			E.emp_phone			as phone,
+			E.emp_deleted		as deleted
+		from 
+			(select 
+				row_number() over (order by emp_no desc) row_numbers,
+				emp_no,
+				emp_name,
+				emp_dept_no,
+				emp_position_no,
+				emp_phone,
+				emp_deleted
+			from
+				comm_employees
+			) E, comm_departments D, comm_positions P
+		where
+			E.emp_dept_no = D.department_no
+			and E.emp_position_no = P.position_no
+			and row_numbers between #begin# and #end#
+	</select>
 	
+	<insert id="insertEmployee" parameterClass="com.community.employees.Employee">
+		insert into comm_employees
+			(emp_no, emp_password, emp_name, emp_email, emp_phone, emp_dept_no, emp_position_no, emp_type)
+		values
+			(comm_employees_seq.nextval, #password#, #name#, #email#, #phone#, #deptNo#, #positionNo#, #type#)
+	</insert>
+	
+	<select id="getEmployeeByNo" parameterClass="int" resultClass="com.community.employees.Employee">
+		select
+			emp_no				as no,
+			emp_password		as password,
+			emp_name			as name,
+			emp_email			as email,
+			emp_phone			as phone,
+			emp_dept_no			as deptNo,
+			emp_position_no		as positionNo,
+			emp_type			as type,
+			emp_deleted			as deleted,
+			emp_created_date	as createdDate,
+			emp_updated_date	as updatedDate,
+			emp_deleted_date	as deletedDate
+		from
+			comm_employees
+		where
+			emp_no = #value#
+	</select>
+
+	<select id="getEmployeeByEmail" parameterClass="string" resultClass="com.community.employees.Employee">
+		select
+			emp_no				as no,
+			emp_password		as password,
+			emp_name			as name,
+			emp_email			as email,
+			emp_phone			as phone,
+			emp_dept_no			as deptNo,
+			emp_position_no		as positionNo,
+			emp_type			as type,
+			emp_deleted			as deleted,
+			emp_created_date	as createdDate,
+			emp_updated_date	as updatedDate,
+			emp_deleted_date	as deletedDate
+		from
+			comm_employees
+		where
+			emp_email = #value#
+	</select>
+	
+	<update id="updateEmployee" parameterClass="com.community.employees.Employee">
+		update
+			comm_employees
+		set
+			emp_password = #password#,
+			emp_name = #name#,
+			emp_email = #email#,
+			emp_phone = #phone#,
+			emp_dept_no = #deptNo#,
+			emp_position_no = #positionNo#,
+			emp_type = #type#,
+			emp_deleted = #deleted#,
+			emp_updated_date = sysdate,
+			emp_deleted_date = #deletedDate#
+		where
+			emp_no = #no#
+	</update>
 </sqlMap>
 
