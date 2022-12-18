@@ -4,5 +4,52 @@
  
 <sqlMap namespace="positions">
 
+	<select id="getAllPositions" resultClass="com.community.positions.Position">
+		select
+			position_no 		as no,
+			position_seq		as seq,
+			position_name		as name
+		from
+			comm_positions
+		order by
+			position_seq asc
+	</select>
+
+	<select id="getPositionByNo" parameterClass="int" resultClass="com.community.positions.Position">
+		select
+			position_no 		as no,
+			position_seq		as seq,
+			position_name		as name
+		from
+			comm_positions
+		where
+			position_no = #value#
+	</select>
+	
+	<insert id="insertPosition" parameterClass="com.community.positions.Position">
+		insert into comm_positions
+			(position_no, position_seq, position_name)
+		values
+			(comm_positions_seq.nextval, #seq#, #name#)
+	</insert>
+	
+	<update id="updatePositionSeq" parameterClass="int">
+		update
+			comm_positions
+		set
+			position_seq = position_seq + 1
+		where
+			position_seq >=  #value#
+	</update>
+	
+	<update id="updatePosition" parameterClass="com.community.positions.Position">
+		update
+			comm_positions
+		set
+			position_seq = #seq#,
+			position_name = #name#
+		where
+			position_no = #no#
+	</update>
 </sqlMap>
 

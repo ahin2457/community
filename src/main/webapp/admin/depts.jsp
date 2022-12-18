@@ -1,3 +1,5 @@
+<%@page import="com.community.positions.Position"%>
+<%@page import="com.community.positions.PositionDao"%>
 <%@page import="com.community.departments.Department"%>
 <%@page import="java.util.List"%>
 <%@page import="com.community.departments.DepartmentDao"%>
@@ -30,9 +32,13 @@
 --%>
 <%
 	DepartmentDao departmentDao = DepartmentDao.getInstance();
+	PositionDao positionDao = PositionDao.getInstance();
 
 	// 전체 부서목록을 조회한다.
 	List<Department> departmentList = departmentDao.getAllDepartments();
+	
+	// 전체 직위목록을 조회한다.
+	List<Position> positionList = positionDao.getAllPositions();
 %>		
 <div class="container my-3">
 	<div class="row mb-3">
@@ -63,10 +69,10 @@
 <%
 	for (Department department : departmentList) {
 %>
-							<tr id="row-<%=department.getNo() %>">
+							<tr id="row-dept-<%=department.getNo() %>">
 								<td><%=department.getNo() %></td>
 								<td><%=department.getName() %></td>
-								<td><button class="btn btn-outline-primary btn-xs" data-target-row="#row-<%=department.getNo() %>">수정</button></td>
+								<td><button class="btn btn-outline-primary btn-xs" data-target-row="#row-dept-<%=department.getNo() %>">수정</button></td>
 							</tr>
 <%
 	}
@@ -102,48 +108,26 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>100</td>
-								<td>1</td>
-								<td>대표이사</td>
-								<td><button class="btn btn-outline-primary btn-xs">수정</button></td>
+<%
+	for (Position position : positionList) {
+%>
+							<tr id="row-position-<%=position.getNo() %>">
+								<td><input type="radio" name="postionNo" value="<%=position.getNo() %>"/></td>
+								<td><%=position.getNo() %></td>
+								<td><%=position.getSeq() %></td>
+								<td><%=position.getName() %></td>
+								<td><button class="btn btn-outline-primary btn-xs" data-target-row="#row-position-<%=position.getNo() %>">수정</button></td>
 							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>100</td>
-								<td>2</td>
-								<td>임원</td>
-								<td><button class="btn btn-outline-primary btn-xs">수정</button></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>100</td>
-								<td>3</td>
-								<td>부장</td>
-								<td><button class="btn btn-outline-primary btn-xs">수정</button></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>100</td>
-								<td>4</td>
-								<td>차장</td>
-								<td><button class="btn btn-outline-primary btn-xs">수정</button></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" /></td>
-								<td>100</td>
-								<td>4</td>
-								<td>과장</td>
-								<td><button class="btn btn-outline-primary btn-xs">수정</button></td>
-							</tr>
+<%
+	}
+%>
 						</tbody>
 					</table>
 					<div>
-						<button class="btn btn-outline-secondary btn-xs">맨 위로</button>
-						<button class="btn btn-outline-secondary btn-xs">위로</button>
-						<button class="btn btn-outline-secondary btn-xs">아래로</button>
-						<button class="btn btn-outline-secondary btn-xs">맨 아래로</button>
+						<button class="btn btn-outline-secondary btn-xs" id="btn-move-top">맨 위로</button>
+						<button class="btn btn-outline-secondary btn-xs" id="btn-move-up">위로</button>
+						<button class="btn btn-outline-secondary btn-xs" id="btn-move-down">아래로</button>
+						<button class="btn btn-outline-secondary btn-xs" id="btn-move-bottom">맨 아래로</button>
 					</div>
 				</div>
 				<div class="card-footer text-end">
@@ -185,7 +169,7 @@
 		<input type="hidden" name="deptNo" />
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">부서정보 등록폼</h5>
+				<h5 class="modal-title">부서정보 수정폼</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
@@ -217,13 +201,13 @@
 				<div class="row mb-2">
 					<label class="col-sm-2 col-form-label col-form-label-sm" >노출순위</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control form-control-sm" name="seq" placeholder="노출순위를 입력하세요">
+						<input type="text" class="form-control form-control-sm" name="positionSeq" placeholder="노출순위를 입력하세요">
 					</div>
 				</div>
 				<div class="row mb-2">
 					<label class="col-sm-2 col-form-label col-form-label-sm" >직위명</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control form-control-sm" name="name" placeholder="직위명을 입력하세요">
+						<input type="text" class="form-control form-control-sm" name="positionName" placeholder="직위명을 입력하세요">
 					</div>
 				</div>
 			</div>
@@ -249,7 +233,7 @@
 				<div class="row mb-2">
 					<label class="col-sm-2 col-form-label col-form-label-sm" >직위명</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control form-control-sm" name="name" placeholder="직위명을 입력하세요">
+						<input type="text" class="form-control form-control-sm" name="positionName" placeholder="직위명을 입력하세요">
 					</div>
 				</div>
 			</div>
@@ -275,10 +259,22 @@ $(function() {
 		let departmentNo = $targetRow.find("td:eq(0)").text();
 		let departmentName = $targetRow.find("td:eq(1)").text();
 		$("#form-modify-depts :hidden[name=deptNo]").val(departmentNo);
-		$("#form-modify-depts :hidden[name=deptName]").val(departmentName);
+		$("#form-modify-depts :input[name=deptName]").val(departmentName);
 		
 		deptModifyFormModal.show();
-	})
+	});
+	
+	$("#table-positions .btn").click(function() {
+		let targetRowId = $(this).attr("data-target-row");
+		let $targetRow = $(targetRowId);
+		
+		let positionNo = $targetRow.find("td:eq(1)").text();
+		let positionName = $targetRow.find("td:eq(3)").text();
+		$("#form-modify-positions :hidden[name=positionNo]").val(positionNo);
+		$("#form-modify-positions :input[name=positionName]").val(positionName);
+		
+		positionModifyFormModal.show();
+	});
 })
 </script>
 </body>
