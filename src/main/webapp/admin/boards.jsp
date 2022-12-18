@@ -10,13 +10,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
-<link href="/web-community/resources/css/style.css" rel="stylesheet">
+<link href="/community/resources/css/style.css" rel="stylesheet">
 <title>사내 커뮤니티</title>
 </head>
 <body>
 <jsp:include page="../common/header.jsp">
 	<jsp:param name="menu" value="admin"/>
 </jsp:include>
+<%--
+	요청 방식
+		GET
+	요청 URL
+		http://localhostcommunity/admin/boards.jsp
+		http://localhostcommunity/admin/boards.jsp?boardNo=100
+	요청 파라미터
+		boardNo			게시판 번호
+	요청 처리내용
+		게시판 전체 목록을 화면에 출력한다.
+		요청파라미터로 전달받은 게시판번호에 해당하는 게시판 상세정보를 출력한다.
+--%>
+<%	
+	// 요청 파라미터 값을 조회한다.
+	int boardNo = StringUtils.stringToNumber(request.getParameter("boardNo"));
+
+	BoardDao boardDao = BoardDao.getInstance();
+	
+	// 전체 게시판 목록을 조회한다.
+	List<Board> boardList = boardDao.getAllBoards();
+	
+	// 선택한 게시판의 상세정보를 조회한다.
+	Board selectedBoard = boardDao.getBoardByNo(boardNo);
+%>
 <div class="container my-3">
 	<div class="row mb-3">
 		<div class="col">
@@ -34,29 +58,7 @@
 								<a href="boards.jsp" class="list-group-item list-group-action disabled fw-bold fs-5 text-dark bg-light">
 		  							사내 게시판
 		  						</a>
-<%--
-	요청 방식
-		GET
-	요청 URL
-		http://localhost/web-community/admin/boards.jsp
-		http://localhost/web-community/admin/boards.jsp?boardNo=100
-	요청 파라미터
-		boardNo			게시판 번호
-	요청 처리내용
-		게시판 전체 목록을 화면에 출력한다.
-		요청파라미터로 전달받은 게시판번호에 해당하는 게시판 상세정보를 출력한다.
---%>
 <%	
-	int boardNo = StringUtils.stringToNumber(request.getParameter("boardNo"));
-
-	BoardDao boardDao = BoardDao.getInstance();
-	
-	// 전체 게시판 목록을 조회한다.
-	List<Board> boardList = boardDao.getAllBoards();
-	
-	// 선택한 게시판의 상세정보를 조회한다.
-	Board selectedBoard = boardDao.getBoardByNo(boardNo);
-	
 	for (Board board : boardList) {
 		if (board.getNo() == 0) {
 			continue;

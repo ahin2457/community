@@ -7,7 +7,7 @@
 	요청 방식
 		POST
 	요청 URL
-		http://localhost/web-community/admin/board-register.jsp
+		http://localhost/community/admin/board-register.jsp
 	요청 파라미터
 		parentBoardNo	상위 게시판 번호
 		name			게시판 이름
@@ -26,8 +26,9 @@
 	String writeOption = request.getParameter("writeOption");
 	
 	BoardDao boardDao = BoardDao.getInstance();
-
+	// 상위 게시판 정보를 조회한다.
 	Board parentBoard = boardDao.getBoardByNo(parentBoardNo);
+	// 상위 게시판보다 출력순서가 늦은 게시판의 출력순서를 변경한다.
 	boardDao.updateBoardSeq(parentBoardNo);
 	
 	// 조회된 게시판 정보를 Board객체에 저장한다.

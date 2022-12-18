@@ -7,7 +7,7 @@
 	요청 방식
 		POST
 	요청 URL
-		http://localhost/web-community/admin/board-modify.jsp
+		http://localhost/community/admin/board-modify.jsp
 	요청 파라미터
 		boardNo			게시판 번호
 		parentBoardNo	상위 게시판 번호
@@ -31,10 +31,9 @@
 	String writeOption = request.getParameter("writeOption");
 
 	BoardDao boardDao = BoardDao.getInstance();
-	
 	// 게시판 번호에 해당하는 게시판정보를 조회한다.
 	Board board = boardDao.getBoardByNo(boardNo);
-	
+	// 변경전의 상위게시판 번호와 변경할 상위게시판 번호가 서로 다르면 상위 게시판 정보를 조회하고, 상위 게시판 보다 출력순서가 늦은 게시판들의 출력순서를 변경한다.
 	if (board.getParentBoardNo() != parentBoardNo) {
 		Board parentBoard = boardDao.getBoardByNo(parentBoardNo);
 		boardDao.updateBoardSeq(parentBoardNo);
