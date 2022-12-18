@@ -56,7 +56,7 @@
 						<colgroup>
 							<col width="15%">
 							<col width="*">
-							<col width="10%">
+							<col width="12%">
 						</colgroup>
 						<thead>
 							<tr>
@@ -92,15 +92,13 @@
 					<p>전체 직위목록을 확인하세요.</p>
 					<table class="table table-sm" id="table-positions">
 						<colgroup>
-							<col width="10%">
 							<col width="15%">
 							<col width="15%">
 							<col width="*">
-							<col width="10%">
+							<col width="12%">
 						</colgroup>
 						<thead>
 							<tr>
-								<th></th>
 								<th>번호</th>
 								<th>순서</th>
 								<th>직위이름</th>
@@ -112,7 +110,6 @@
 	for (Position position : positionList) {
 %>
 							<tr id="row-position-<%=position.getNo() %>">
-								<td><input type="radio" name="postionNo" value="<%=position.getNo() %>"/></td>
 								<td><%=position.getNo() %></td>
 								<td><%=position.getSeq() %></td>
 								<td><%=position.getName() %></td>
@@ -123,12 +120,6 @@
 %>
 						</tbody>
 					</table>
-					<div>
-						<button class="btn btn-outline-secondary btn-xs" id="btn-move-top">맨 위로</button>
-						<button class="btn btn-outline-secondary btn-xs" id="btn-move-up">위로</button>
-						<button class="btn btn-outline-secondary btn-xs" id="btn-move-down">아래로</button>
-						<button class="btn btn-outline-secondary btn-xs" id="btn-move-bottom">맨 아래로</button>
-					</div>
 				</div>
 				<div class="card-footer text-end">
 					<button class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#modal-form-positions">신규 등록</button>
@@ -268,13 +259,14 @@ $(function() {
 		let targetRowId = $(this).attr("data-target-row");
 		let $targetRow = $(targetRowId);
 		
-		let positionNo = $targetRow.find("td:eq(1)").text();
-		let positionName = $targetRow.find("td:eq(3)").text();
+		let positionNo = $targetRow.find("td:eq(0)").text();
+		let positionName = $targetRow.find("td:eq(2)").text();
 		$("#form-modify-positions :hidden[name=positionNo]").val(positionNo);
 		$("#form-modify-positions :input[name=positionName]").val(positionName);
 		
 		positionModifyFormModal.show();
 	});
+
 })
 </script>
 </body>
