@@ -60,11 +60,11 @@
 			<form id="form-login" class="border bg-light p-3" method="post" action="login.jsp">
 				<div class="mb-3">
 					<label class="form-label">직원번호</label>
-					<input type="text" class="form-control" name="empNo"/>
+					<input type="text" class="form-control" name="empNo" value="1000"/>
 				</div>
 				<div class="mb-3">
 					<label class="form-label">비밀번호</label>
-					<input type="password" class="form-control" name="empPassword"/>
+					<input type="password" class="form-control" name="empPassword" value="1111"/>
 				</div>
 				<div class="text-end">
 					<a href="../home.jsp" class="btn btn-secondary">취소</a>

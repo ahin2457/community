@@ -37,4 +37,8 @@ public class EmployeeDao {
 	public void updateEmployee(Employee employee) {
 		SqlMapper.update("employees.updateEmployee", employee);
 	}
+
+	public EmployeeDetailDto getEmployeeDetail(int employeeNo) {
+		return (EmployeeDetailDto) SqlMapper.selectOne("employees.getEmployeeDetail", employeeNo);
+	}
 }

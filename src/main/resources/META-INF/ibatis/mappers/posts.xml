@@ -22,6 +22,9 @@
 			<isNotNull property="boardNo">
 				and post_board_no = #boardNo#
 			</isNotNull>
+			<isNotNull property="empNo">
+				and post_writer_no = #empNo#
+			</isNotNull>
 		</dynamic>
 	</select>
 	

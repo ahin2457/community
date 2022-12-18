@@ -4,5 +4,21 @@
  
 <sqlMap namespace="post-comments">
 
+	<select id="getAllTotalRows" parameterClass="map" resultClass="int">
+		select
+			count(*)
+		from
+			comm_post_comments
+		where
+			1 = 1
+			<dynamic>
+				<isNotNull property="postNo">
+					and comment_post_no = #postNo#
+				</isNotNull>
+				<isNotNull property="empNo">
+					and comment_emp_no = #empNo#
+				</isNotNull>
+			</dynamic>
+	</select>
 </sqlMap>
 

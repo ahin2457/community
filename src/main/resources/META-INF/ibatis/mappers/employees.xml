@@ -103,5 +103,29 @@
 		where
 			emp_no = #no#
 	</update>
+	
+	<select id="getEmployeeDetail" parameterClass="int" resultClass="com.community.employees.EmployeeDetailDto">
+		select
+			E.emp_no				as no,
+			E.emp_password			as password,
+			E.emp_name				as name,
+			E.emp_email				as email,
+			E.emp_phone				as phone,
+			E.emp_dept_no			as deptNo,
+			D.department_name		as deptName,
+			E.emp_position_no		as positionNo,
+			P.position_name			as positionName,
+			E.emp_type				as type,
+			E.emp_deleted			as deleted,
+			E.emp_created_date		as createdDate,
+			E.emp_updated_date		as updatedDate,
+			E.emp_deleted_date		as deletedDate
+		from
+			comm_employees E, comm_departments D, comm_positions P
+		where
+			E.emp_dept_no = D.department_no
+			and E.emp_position_no = P.position_no
+			and E.emp_no = #value#
+	</select>
 </sqlMap>
 

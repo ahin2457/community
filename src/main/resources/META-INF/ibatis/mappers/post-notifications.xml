@@ -4,5 +4,18 @@
  
 <sqlMap namespace="post-notifications">
 
+	<select id="getAllTotalRows" parameterClass="map" resultClass="int">
+		select
+			count(*)
+		from
+			comm_post_notifications
+		where
+			1 = 1
+		<dynamic>
+			<isNotNull property="empNo">
+				and notification_receive_emp_no = #empNo#
+			</isNotNull>
+		</dynamic>
+	</select>
 </sqlMap>
 

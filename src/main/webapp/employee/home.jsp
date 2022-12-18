@@ -1,3 +1,12 @@
+<%@page import="com.community.posts.NotificationDao"%>
+<%@page import="com.community.posts.CommentDao"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
+<%@page import="com.community.posts.PostDao"%>
+<%@page import="com.community.employees.EmployeeDao"%>
+<%@page import="com.community.employees.EmployeeDetailDto"%>
+<%@page import="com.community.util.StringUtils"%>
+<%@page import="com.community.employees.Employee"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -14,6 +23,39 @@
 <jsp:include page="../common/header.jsp">
 	<jsp:param name="menu" value="employee"/>
 </jsp:include>
+<%--
+	요청 방식
+		GET
+	요청 URL
+		http://localhost/community/employee/home.jsp
+	요청 파라미터
+		없음
+	요청 처리 내용
+		세션에 저장된 로그인된 직원 정보를 출력한다.
+		해당 직원이 작성한 글 갯수, 작성한 댓글 갯수, 받은 알림 갯수를 조회해서 출력한다.
+ --%>
+<%
+	Employee loginEmployee = (Employee) session.getAttribute("LOGIN_EMPLOYEE");
+	if (loginEmployee == null) {
+		response.sendRedirect("../login-form.jsp?error=deny");
+		return;
+	}
+	
+	EmployeeDao employeeDao = EmployeeDao.getInstance();
+	PostDao postDao = PostDao.getInstance();
+	CommentDao commentDao = CommentDao.getInstance();
+	NotificationDao notificationDao = NotificationDao.getInstance();
+	
+	// 직원 상세정보를 조회한다.
+	EmployeeDetailDto dto = employeeDao.getEmployeeDetail(loginEmployee.getNo());
+	
+	Map<String, Object> param = new HashMap<>();
+	param.put("empNo", loginEmployee.getNo());
+	
+	int postTotalRows = postDao.getAllTotalRows(param);
+	int commentTotalRows = commentDao.getAllTotalRows(param);
+	int notificationTotalRows = notificationDao.getAllTotalRows(param);
+%>
 <div class="container my-3">
 	<div class="row mb-3">
 		<div class="col">
@@ -26,11 +68,10 @@
 				<div class="card-header">나의 메뉴</div>
 				<div class="card-body">
 					<div class="list-group">
-						<a href="" class="list-group-item list-group-item-action active">내 정보 보기</a>
-						<a href="" class="list-group-item list-group-item-action">내가 작성한 게시글</a>
-						<a href="" class="list-group-item list-group-item-action">내가 작성한 댓글</a>
-						<a href="" class="list-group-item list-group-item-action">나에게 온 알림</a>
-						<a href="" class="list-group-item list-group-item-action">나에게 온 알림</a>
+						<a href="home.jsp" class="list-group-item list-group-item-action active">내 정보 보기</a>
+						<a href="my-posts.jsp" class="list-group-item list-group-item-action">내가 작성한 게시글</a>
+						<a href="my-comments.jsp" class="list-group-item list-group-item-action">내가 작성한 댓글</a>
+						<a href="my-notifications.jsp" class="list-group-item list-group-item-action">나에게 온 알림</a>
 					</div>
 				</div>
 				<div class="card-body">
@@ -43,7 +84,6 @@
 		<div class="col-9">
 			<div class="row mb-3">
 				<div class="col-12">
-					<p>내 정보를 확인하세요</p>
 					<table class="table table-bordered">
 						<colgroup>
 							<col width="15%">
@@ -53,19 +93,19 @@
 						</colgroup>
 						<tbody>
 							<tr>
-								<th class="bg-light">직원번호</th><td>1000</td>
-								<th class="bg-light">입사일</th><td>2022년 12월 1일</td>
+								<th class="bg-light">직원번호</th><td><%=dto.getNo() %></td>
+								<th class="bg-light">입사일</th><td><%=StringUtils.dateToText(dto.getCreatedDate()) %></td>
 							</tr>
 							<tr>
-								<th class="bg-light">소속부서</th><td>개발1팀</td>
-								<th class="bg-light">직위</th><td>과장</td>
+								<th class="bg-light">소속부서</th><td><%=dto.getDeptName() %></td>
+								<th class="bg-light">직위</th><td><%=dto.getPositionName() %></td>
 							</tr>
 							<tr>
-								<th class="bg-light">이름</th><td colspan="3">홍길동</td>
+								<th class="bg-light">이름</th><td colspan="3"><%=dto.getName() %></td>
 							</tr>
 							<tr>
-								<th class="bg-light">연락처</th><td>010-1111-1111</td>
-								<th class="bg-light">이메일</th><td>hong@gmail.com</td>
+								<th class="bg-light">연락처</th><td><%=dto.getPhone() %></td>
+								<th class="bg-light">이메일</th><td><%=dto.getEmail() %></td>
 							</tr>
 						</tbody>
 					</table>
@@ -79,25 +119,25 @@
 							<div class="row p-3">
 								<div class="col-4">
 								<div class="card">
-									<div class="card-body bg-primary text-white text-bold">
+									<div class="card-body bg-light text-bold">
 										<h5>내가 작성한 글</h5>
-										<small>내가 작성한 글은 <strong>10개</strong> 입니다.</small>
+										<small>내가 작성한 글은 <strong><%=postTotalRows %>개</strong> 입니다.</small>
 									</div>
 								</div>
 								</div>
 								<div class="col-4">
 									<div class="card">
-										<div class="card-body bg-success text-white text-bold">
+										<div class="card-body bg-light text-bold">
 											<h5>내가 작성한 댓글</h5>
-											<small>내가 작성한 댓글은 <strong>10개</strong> 입니다.</small>
+											<small>내가 작성한 댓글은 <strong><%=commentTotalRows %>개</strong> 입니다.</small>
 										</div>
 									</div>
 								</div>
 								<div class="col-4">
 									<div class="card">
-										<div class="card-body bg-danger text-white text-bold">
+										<div class="card-body bg-light text-bold">
 											<h5>내에게 온 알림</h5>
-											<small>나에게 온 알림은 <strong>10개</strong> 입니다.</small>
+											<small>나에게 온 알림은 <strong><%=notificationTotalRows %>개</strong> 입니다.</small>
 										</div>
 									</div>
 								</div>
